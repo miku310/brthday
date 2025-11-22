@@ -1,0 +1,765 @@
+/* reset / layout */
+* { box-sizing: border-box; }
+html,body { height: 100%; margin: 0; padding: 0; }
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #000, #460817);
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* main content full-screen */
+#mainContent {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* --- Intro central (pour phrase 1 et 2) --- */
+.intro-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.center-intro {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid rgba(255, 255, 255, 0.85);
+  padding: 0 10px;
+}
+
+/* animation pour taper (mais on utilisera JS pour contrôle) */
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+/* classes pour faire disparaître l'élément en fondu */
+.hide-fade {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.99);
+}
+
+/* --- Top banner (3ème phrase) --- */
+.top-banner {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 18;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  pointer-events: none;
+}
+.top-banner.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --- Countdown box --- */
+.countdown-box {
+  position: absolute;
+  top: 35%; /* <- avant c’était 50%, on le remonte un peu */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 360px;
+  background: rgba(255, 105, 198, 0.16);
+  backdrop-filter: blur(6px);
+  border-radius: 18px;
+  padding: 28px 36px;
+  text-align: center;
+  z-index: 16;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform-origin: center;
+}
+.countdown-box.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* --- Photo bottom --- */
+.photo-container {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.photo-container.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.bottom-photo {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 3px solid #afaaaa;
+  box-shadow: 0 8px 30px rgba(255, 105, 198, 0.9);
+}
+
+/* hearts container unchanged */
+.hearts-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* --- Hearts animation --- */
+.heart {
+  position: absolute;
+  bottom: 0;
+  background: rgba(255, 105, 198, 0.9);
+  transform: rotate(45deg);
+  animation: fall linear forwards;
+  border-radius: 4px;
+}
+
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.heart::before {
+  top: -50%;
+  left: 0;
+}
+
+.heart::after {
+  top: 0;
+  left: -50%;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-110vh) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+
+/* simple responsive */
+@media (max-width: 480px) {
+  .center-intro { font-size: 1.2rem; }
+  #countdown { font-size: 1.4rem; }
+  .countdown-box { min-width: 260px; padding: 20px; }
+  .bottom-photo { width: 120px; height: 120px; }
+}
+
+
+/* --- Buttons --- */
+.button {
+  background-color: #ff004c;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: background 0.3s;
+}
+.button:hover { background-color: #ff2e6d; }
+
+/* --- Transitions --- */
+.fade-in { animation: fadeIn 1.5s ease-in-out forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+.fade-transition { opacity: 0; transform: scale(0.98); transition: all 0.4s ease; }
+
+/* --- Inputs --- */
+.input-box {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 60%;
+  font-size: 1em;
+  margin-top: 10px;
+  text-align: center;
+}
+.feedback { margin-top: 15px; font-size: 1.1em; }
+
+/* --- Fleche bas pour next page --- */
+.next-arrow {
+  position: fixed;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  font-size: 2.2rem;
+  color: #ffb6e6;
+  cursor: pointer;
+  z-index: 100;
+  animation: arrowBounce 1.2s infinite;
+  user-select: none;
+}
+@keyframes arrowBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(12px); }
+}
+
+/* Ajout pour éviter que le texte passe sous la flèche */
+.letter-screen .letter-text {
+  padding-bottom: 60px;
+}
+
+.love-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(255, 105, 198, 0.10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  text-align: center;
+}
+.love-screen .love-text {
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 32px;
+  font-weight: 600;
+  text-shadow: 0 2px 12px #0008;
+}
+#heartCanvasFinal {
+  display: block;
+  margin: 0 auto;
+  background: none;
+}
+
+
+/* 🌇 Page See You Again */
+.see-you-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ffd6e0, #ffe8f1);
+  color: #444;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+}
+
+.stars {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(white 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.2;
+  animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.1; }
+  to { opacity: 0.3; }
+}
+
+.countdown {
+  font-size: 2.3em;
+  font-weight: bold;
+  background: rgba(255,255,255,0.4);
+  padding: 12px 24px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  margin-top: 10px;
+}
+
+.note {
+  margin-top: 25px;
+  opacity: 0.7;
+  font-size: 1em;
+}
+
+.see-you-photo {
+  display: block;
+  margin: 30px auto 0 auto;
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 3px solid #ffb6e6;
+  box-shadow: 0 4px 18px rgba(255, 105, 198, 0.18);
+}
+
+/* Ajoute à la fin de bth.css */
+.playlist-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(135deg, #000, #460817);  color: #ffffff;
+  padding-top: 40px;
+}
+.playlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0 0 0;
+  width: 90%;
+  max-width: 500px;
+}
+.playlist-list li {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.playlist-link {
+  color: #ff4b8b;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.playlist-link:hover {
+  color: #ff004c;
+  text-decoration: underline;
+}
+
+.playlist-section {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.playlist-container {
+  max-height: 400px; /* hauteur fixe */
+  overflow-y: auto; /* rend la playlist défilante */
+  width: 80%;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  backdrop-filter: blur(8px);
+}
+
+/* joli style pour chaque musique */
+.playlist-item {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.playlist-item:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.02);
+}
+
+.playlist-item a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.playlist-item a:hover {
+  text-decoration: underline;
+}
+
+.movies-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.movies-container {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  overflow-y: auto;
+  max-height: 400px; /* hauteur fixe */
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 15px;
+  padding: 15px;
+  backdrop-filter: blur(8px);
+}
+
+
+
+.movie-item {
+  font-size: 1.2rem;
+  margin: 8px 0;
+  letter-spacing: 0.5px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.fade-in-delay {
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.video-intro {
+  text-align: center;
+  font-size: 1.5em;
+  color: #fff;
+  padding: 100px 20px;
+  transition: opacity 1s ease;
+}
+
+.hidden {
+  display: none;
+}
+
+.video-section {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #000, #460817);}
+
+.video-box {
+  background: rgba(255,255,255,0.13);
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(255, 105, 198, 0.18);
+  padding: 24px 28px;
+  max-height: 80vh;
+  width: 370px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.surprise-video {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+
+/* --- Page du futur --- */
+
+.future-page.active {
+  display: flex;
+}
+.future-photo {
+  width: 180px;
+  max-width: 80vw;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(255, 105, 198, 0.18), 0 2px 8px rgba(0,0,0,0.10);
+  margin: 28px auto 18px auto;
+  display: block;
+  transition: transform 0.3s;
+}
+.future-photo:hover {
+  transform: translateY(-8px) scale(1.04);
+}
+.future-caption {
+  font-size: 1.3em;
+  color: #ff5c8d;
+  margin-bottom: 40px;
+}
+.future-page {
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(135deg, #000, #460817);  text-align: center;
+  padding: 32px 12px 48px 12px;
+}
+
+/* --- Flèche --- */
+.next-arrow {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  font-size: 2.2rem;
+  color: #ff5c8d;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  animation: arrowBounce 1.2s infinite;
+  user-select: none;
+}
+
+.next-arrow:hover {
+  transform: scale(1.3);
+}
+
+.final-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: linear-gradient(135deg, #000, #460817);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+  transition: background 1.5s;
+}
+.final-quote {
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: 600;
+  text-align: center;
+  max-width: 90vw;
+  opacity: 1;
+  transition: opacity 1.5s;
+  z-index: 2;
+  text-shadow: 0 2px 16px #000a;
+}
+.falling-stars {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+.star {
+  position: absolute;
+  top: -10px;
+  width: 2px;
+  height: 18px;
+  background: linear-gradient(180deg, #fff, transparent);
+  opacity: 0.8;
+  border-radius: 2px;
+  animation: starFall linear forwards;
+}
+@keyframes starFall {
+  to {
+    transform: translateY(100vh) translateX(10vw) scaleX(1.2);
+    opacity: 0;
+  }
+}
+
+
+/* 🎂 Cake container */
+.cake-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #2e1a10, #120904);
+  padding-bottom: 40px;
+  text-align: center;
+}
+
+/* 🍫 Gâteau chocolat réaliste */
+.cake {
+  width: 160px;
+  height: 150px;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+/* Base chocolat (réaliste grâce au gradient) */
+.cake-body {
+  width: 160px;
+  height: 110px;
+  background: linear-gradient(180deg, #532f17, #3b1f0c 40%, #2b1507);
+  border-radius: 20px;
+  position: absolute;
+  bottom: 0;
+  box-shadow: inset 0 -10px 15px rgba(0, 0, 0, 0.5),
+              inset 0 8px 12px rgba(255, 255, 255, 0.06);
+}
+
+/* Glaçage chocolat fondant */
+.icing {
+  width: 160px;
+  height: 65px;
+  background: linear-gradient(180deg, #8c5632, #6a3c21);
+  border-radius: 25px 25px 15px 15px;
+  position: absolute;
+  top: 0;
+  z-index: 3;
+  box-shadow: inset 0 -10px 14px rgba(0,0,0,0.4);
+}
+
+/* Drips (gouttes de chocolat) */
+.icing::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 20px;
+  width: 120px;
+  height: 35px;
+  background: #6a3c21;
+  border-radius: 20px;
+  clip-path: polygon(
+    0 0, 10% 30%, 20% 0, 35% 35%, 45% 0,
+    60% 40%, 75% 0, 90% 25%, 100% 0,
+    100% 100%, 0 100%
+  );
+}
+
+/* Assiette */
+.plate {
+  width: 200px;
+  height: 25px;
+  background: radial-gradient(circle, #f5e6d7, #d8c3b5);
+  border-radius: 50%;
+  position: absolute;
+  bottom: -30px;
+  left: -20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* 🕯 Bougies fines réalistes */
+.candles {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  position: absolute;
+  top: -50px;
+  width: 100%;
+  z-index: 10;
+}
+
+.candle {
+  width: 6px;
+  height: 38px;
+  background: #ffc7d8;
+  border-radius: 3px;
+  position: relative;
+  box-shadow: inset 0 0 5px #ff8fb3;
+}
+
+/* Cœur réaliste */
+.candle::before {
+  content: "";
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: #ff497b;
+  clip-path: path("M8 2 C8 0 5 0 5 2 C5 3.5 8 6 8 6 C8 6 11 3.5 11 2 C11 0 8 0 8 2 Z");
+  animation: heartPulse 1.3s infinite alternate;
+}
+
+@keyframes heartPulse {
+  0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+  100% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+}
+
+/* 🔥 Flammes réalistes */
+.flame, .flame2, .flame3 {
+  width: 10px;
+  height: 18px;
+  background: radial-gradient(circle at 50% 30%, #fffdd0 20%, #ffd27f 60%, #ff9c33 90%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  position: absolute;
+  top: -20px;
+  left: -2px;
+  opacity: 1;
+  animation: flameMove 1.2s infinite ease-in-out alternate;
+  filter: drop-shadow(0 0 6px #ffb347);
+}
+
+@keyframes flameMove {
+  0% { transform: scale(1) rotate(-3deg); }
+  50% { transform: scale(1.15) rotate(3deg); }
+  100% { transform: scale(1) rotate(-3deg); }
+}
+
+/* Texte */
+.text {
+  position: absolute;
+  top: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffe0e0;
+  font-size: 1.4rem;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.text2 {
+  margin-top: 20px;
+  color: #ffd9bd;
+  font-size: 1rem;
+}
+
+
+.cake-extra-text {
+  margin-top: 40px;
+  max-width: 420px;
+  font-size: 1.15em;
+  color: #ffd9bd;
+  text-align: center;
+  opacity: 0.92;
+  line-height: 1.7;
+}
+.cake-extra-text hr {
+  border: none;
+  border-top: 1px solid #ffd9bd;
+  margin: 24px 0;
+}
+
+.cake-message-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #000, #460817);
+  text-align: center;
+  padding: 32px 12px 48px 12px;
+}

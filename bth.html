@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="french">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anniversaire ❤️</title>
+  <link rel="icon" type="image/gif" href="source.gif">
+  <link rel="stylesheet" href="bth.css">
+</head>
+
+<body>
+  <div id="mainContent">
+    <!-- intro central (on réutilisera le même élément pour les 1ère et 2ème phrases) -->
+    <div class="intro-wrapper">
+      <p id="centerIntro" class="center-intro"></p>
+    </div>
+
+    <!-- bannière en haut (3ème phrase) -->
+    <div id="topBanner" class="top-banner"></div>
+
+    <!-- box du countdown (masquée au départ) -->
+    <div class="countdown-box" id="countdownBox" aria-hidden="true">
+      <h2>Le grand jour arrive dans 🎉</h2>
+      <div id="countdown"></div>
+    </div>
+
+    <!-- photo en bas (masquée au départ) -->
+    <div class="photo-container" id="photoContainer" aria-hidden="true">
+      <img src="57a66157-7738-4b8f-9bb8-ea56b75f70e8 (2).jpeg" alt="Photo de lui petit" class="bottom-photo">
+      <p class="caption">Recognize this little angel? 😍</p>
+    </div>
+  </div>
+
+  <!-- ❤️ Animation de cœurs -->
+  <div class="hearts-container"></div>
+
+  <!-- 🎶 Musique -->
+  <audio id="bgMusicGlobal" src="Patrick Watson - Je te laisserai des mots (Official French Lyric Video).mp4" loop preload="auto"></audio>
+
+  <!-- 🎥 Vidéo surprise intro (optionnel, masquée au départ) -->
+  <div class="video-intro hidden" id="videoIntro">
+    <p id="videoIntroText">🎬 I couldn’t bring your favorite celebrities… but I did something else 😌💫</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
